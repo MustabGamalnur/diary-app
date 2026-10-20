@@ -1,4 +1,3 @@
-// src/components/DiaryDetailModal.js
 import React from 'react';
 import { Modal, View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { COLORS, SPACE, RADIUS, TYPO } from '../styles/tokens';
@@ -6,15 +5,13 @@ import { COLORS, SPACE, RADIUS, TYPO } from '../styles/tokens';
 export default function DiaryDetailModal({ visible, onClose, entry }) {
   if (!entry) return null;
 
-  const { title, date, body, heroUri, imageSource } = entry;
+  const { title, date, body, heroUri, moodImage } = entry;
+  const imageSource = heroUri ? { uri: heroUri } : moodImage;
 
   return (
-    <Modal visible={visible} animationType="slide" transparent={false}>
+    <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
-        <Image
-          source={heroUri ? { uri: heroUri } : imageSource}
-          style={styles.hero}
-        />
+        {imageSource && <Image source={imageSource} style={styles.hero} />}
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.date}>{date}</Text>
@@ -67,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#ffffff',
+    color: '#fff',
     fontWeight: '700',
   },
 });

@@ -1,4 +1,3 @@
-// src/components/DiaryCard.js
 import React from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { COLORS, SPACE, RADIUS, TYPO } from '../styles/tokens';
@@ -7,20 +6,20 @@ export default function DiaryCard({
   title,
   date,
   preview,
-  imageSource,
-  onPress,
-  variant = 'list',
+  moodImage,
+  liked = false,
+  onPress = () => {},
+  onToggleLike = () => {},
 }) {
   return (
     <Pressable
       onPress={onPress}
-      android_ripple={{ color: '#e5e7eb' }}
-      style={({ pressed }) => [{ opacity: pressed ? 0.85 : 1, flex: 1 }]}
+      style={({ pressed }) => [{ opacity: pressed ? 0.85 : 1 }]}
       accessible
       accessibilityLabel={`Entri ${title} tanggal ${date}`}
     >
-      <View style={[styles.card, variant === 'grid' && styles.cardGrid]}>
-        <Image source={imageSource} style={styles.mood} />
+      <View style={styles.card}>
+        <Image source={moodImage} style={styles.mood} />
         <View style={styles.content}>
           <Text style={styles.title} numberOfLines={1}>
             {title}
@@ -30,6 +29,13 @@ export default function DiaryCard({
             {preview}
           </Text>
         </View>
+        <Pressable
+          onPress={onToggleLike}
+          hitSlop={8}
+          accessibilityLabel={liked ? 'Batal suka' : 'Suka'}
+        >
+          <Text style={styles.like}>{liked ? '❤️' : '🤍'}</Text>
+        </Pressable>
       </View>
     </Pressable>
   );
@@ -44,12 +50,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: RADIUS.card,
     backgroundColor: COLORS.surface,
-    marginBottom: SPACE.m,
-  },
-  cardGrid: {
-    flexDirection: 'column',
     alignItems: 'center',
-    textAlign: 'center',
   },
   mood: {
     width: 64,
@@ -73,5 +74,9 @@ const styles = StyleSheet.create({
   preview: {
     fontSize: TYPO.body,
     color: COLORS.text,
+  },
+  like: {
+    fontSize: 22,
+    paddingHorizontal: 6,
   },
 });
